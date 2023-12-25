@@ -7,6 +7,21 @@ const createUserIntoDB = async (user: TUser) => {
     return result;
 }
 
+const getUserIntoDB = async () => {
+    const result = await userModel.find({},{username:1,fullName:1,age:1,email:1,address:1});
+    return result;
+}
+
+const getSingleUserIntoDB = async (id: string) => {
+    console.log(id);
+    const result = await userModel.findOne({ userId:id }, {
+        username:1,fullName:1,age:1,email:1,address:1
+    });
+    return result;
+}
+
 export const userService = {
-    createUserIntoDB
+    createUserIntoDB,
+    getUserIntoDB,
+    getSingleUserIntoDB
 }

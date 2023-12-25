@@ -14,6 +14,50 @@ const createUser = async(req: Request, res: Response) => {
             data: result
         });
     } catch (err) {
+        // console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error: {
+                code: 404,
+                description: "User not found!",
+            },
+        });
+    }
+}
+
+const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const result = await userService.getUserIntoDB();
+        res.status(200).json({
+            success: true,
+            message: "Users are retrieved successfully!",
+            data: result,
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error: {
+                code: 404,
+                description: "User not found!",
+            },
+        });
+    }
+}
+
+const getSingleUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
+        console.log(userId);
+        const result = await userService.getSingleUserIntoDB(userId);
+        res.status(200).json({
+            success: true,
+            message: "User data is retrieved successfully!",
+            data: result,
+        });
+    } catch (err) {
         console.log(err);
         res.status(500).json({
             success: false,
@@ -27,5 +71,7 @@ const createUser = async(req: Request, res: Response) => {
 }
 
 export const userController = {
-    createUser
+    createUser,
+    getAllUsers,
+    getSingleUser
 }
