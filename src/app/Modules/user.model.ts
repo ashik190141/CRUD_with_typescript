@@ -17,18 +17,27 @@ const Address = new Schema<Address>({
     country: { type: String, required: true },
 });
 
-const userSchema = new Schema<TUser>({
-    userId: { type: Number, required: true, unique:true },
+const userSchema = new Schema<TUser>(
+  {
+    userId: { type: Number, required: true, unique: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
     fullName: FullName,
     age: { type: Number, required: true },
     email: { type: String, required: true },
     isActive: { type: Boolean, required: true, default: true },
-    hobbies: { type: [String]},
+    hobbies: { type: [String] },
     address: Address,
     // isDeleted: { type: Boolean, required: true, default: false },
-});
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+      },
+    },
+  }
+);
 
 userSchema.pre('save', async function (next) {
     const user = this;
@@ -37,7 +46,7 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.post('save', async function (doc, next) {
-    
+
     next();
 })
 
