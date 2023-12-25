@@ -27,7 +27,7 @@ const userSchema = new Schema<TUser>({
     isActive: { type: Boolean, required: true, default: true },
     hobbies: { type: [String]},
     address: Address,
-    // isDeleted: { type: Boolean, default: false },
+    // isDeleted: { type: Boolean, required: true, default: false },
 });
 
 userSchema.pre('save', async function (next) {
@@ -37,6 +37,7 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.post('save', async function (doc, next) {
+    
     next();
 })
 
