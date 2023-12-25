@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from "express";
 import { userService } from "./user.service";
 import UserValidationSchema from "./user.validation";
@@ -50,7 +51,7 @@ const getAllUsers = async (req: Request, res: Response) => {
 const getSingleUser = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
-        console.log(userId);
+        // console.log(userId);
         const result = await userService.getSingleUserIntoDB(userId);
         res.status(200).json({
             success: true,
@@ -70,8 +71,32 @@ const getSingleUser = async (req: Request, res: Response) => {
     }
 }
 
+const updateUserInfo =async (req:Request, res:Response) => {
+    try {
+        const { users } = req.body;
+        const userId = req.params.userId;
+        const result = await userService.updateUser(users, userId);
+        res.status(200).json({
+          success: true,
+          message: "User updated successfully!",
+          data: await userService.getSingleUserIntoDB(userId),
+        });
+    } catch (err: any) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+            error: {
+                code: 404,
+                description: "User not found!",
+          },
+        });
+    }
+}
+
 export const userController = {
     createUser,
     getAllUsers,
-    getSingleUser
+    getSingleUser,
+    updateUserInfo
 }
