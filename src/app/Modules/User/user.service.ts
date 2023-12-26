@@ -23,6 +23,12 @@ const getSingleUserIntoDB = async (id: string) => {
 }
 
 const updateUser = async (userInfo: TUser, id: string) => {
+
+    const res = await userModel.isUserExist(id);
+    if (res == null) {
+        return
+    }
+    
     const info = userInfo;
     const result = await userModel.updateOne(
         { userId: id },

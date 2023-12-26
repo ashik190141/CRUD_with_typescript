@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model, connect } from "mongoose";
-import { Address, FullName, TUser } from "./User/user.interface";
+import { Address, FullName, TUser, TUserModel } from "./User/user.interface";
 import bcrypt from 'bcrypt'
 import Config from "../Config";
 
@@ -17,7 +17,7 @@ const Address = new Schema<Address>({
     country: { type: String, required: true },
 });
 
-const userSchema = new Schema<TUser>(
+const userSchema = new Schema<TUser, TUserModel>(
   {
     userId: { type: Number, required: true, unique: true },
     username: { type: String, required: true },
@@ -39,6 +39,11 @@ const userSchema = new Schema<TUser>(
   }
 );
 
+userSchema.statics.isUserExist = async function (id: string) {
+  const existingUser = await userModel.findOne({ userId:id });
+  return existingUser;
+}
+
 userSchema.pre('save', async function (next) {
     const user = this;
     user.password = await bcrypt.hash(user.password, Number(Config.bcrypt));
@@ -54,4 +59,4 @@ userSchema.pre('find', async function (next) {
     next()
 })
 
-export const userModel = model<TUser>('user', userSchema);
+export const userModel = model<TUser,TUserModel>('user', userSchema);

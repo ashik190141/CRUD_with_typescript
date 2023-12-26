@@ -75,7 +75,15 @@ const updateUserInfo =async (req:Request, res:Response) => {
     try {
         const { users } = req.body;
         const userId = req.params.userId;
-        const result = await userService.updateUser(users, userId);
+        const result = await userService.updateUser(users, userId)
+        
+        if (!result) {
+            res.status(404).json({
+              success: false,
+              message: "user does not exist"
+            });
+            return;
+        }
         res.status(200).json({
           success: true,
           message: "User updated successfully!",

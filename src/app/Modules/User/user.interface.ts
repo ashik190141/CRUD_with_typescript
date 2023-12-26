@@ -1,4 +1,4 @@
-import { Schema, model, connect } from "mongoose";
+import { Schema, model, connect, Model } from "mongoose";
 
 export type Address = {
     street: string;
@@ -24,3 +24,7 @@ export type TUser = {
     address: Address;
     isDeleted?: boolean;
 };
+
+export interface TUserModel extends Model<TUser> {
+    isUserExist(id:string) : Promise<TUser | null>
+}
