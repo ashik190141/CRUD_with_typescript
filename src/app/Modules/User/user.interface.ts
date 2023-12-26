@@ -22,5 +22,5 @@ export type TUser = {
     isActive: boolean;
     hobbies: Array<string>;
     address: Address;
-    // isDeleted: boolean;
+    isDeleted?: boolean;
 };

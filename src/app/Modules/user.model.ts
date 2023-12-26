@@ -28,7 +28,7 @@ const userSchema = new Schema<TUser>(
     isActive: { type: Boolean, required: true, default: true },
     hobbies: { type: [String] },
     address: Address,
-    // isDeleted: { type: Boolean, required: true, default: false },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     toJSON: {
