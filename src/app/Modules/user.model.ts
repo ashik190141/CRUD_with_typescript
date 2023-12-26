@@ -34,7 +34,8 @@ const userSchema = new Schema<TUser, TUserModel>(
     toJSON: {
       transform(doc, ret) {
         delete ret.password;
-      },
+        delete ret.isDeleted;
+      }
     },
   }
 );
@@ -55,6 +56,11 @@ userSchema.post('save', async function (doc, next) {
 })
 
 userSchema.pre('find', async function (next) {
+    this.find({ isDeleted : {$ne:true}});
+    next()
+})
+
+userSchema.pre('findOne', async function (next) {
     this.find({ isDeleted : {$ne:true}});
     next()
 })

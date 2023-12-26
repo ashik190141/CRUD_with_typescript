@@ -41,9 +41,21 @@ const updateUser = async (userInfo: TUser, id: string) => {
     return result;
 }
 
+const deleteUserIntoDB = async (id: string) => {
+    // console.log(id);
+    const res = await userModel.isUserExist(id);
+    if (res == null) {
+      return;
+    }
+    
+    const result = await userModel.updateOne({userId:id},{isDeleted:true});
+    return result;
+};
+
 export const userService = {
     createUserIntoDB,
     getUserIntoDB,
     getSingleUserIntoDB,
-    updateUser
+    updateUser,
+    deleteUserIntoDB
 }
