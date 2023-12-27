@@ -107,10 +107,19 @@ const deleteUser = async (req: Request, res: Response) => {
         const userId = req.params.userId;
         // console.log(userId);
         const result = await userService.deleteUserIntoDB(userId);
+
+        if (!result) {
+            res.status(404).json({
+                success: false,
+                message: "user does not exist",
+            });
+            return;
+        }
+
         res.status(200).json({
             success: true,
             message: "User deleted successfully!",
-            data: result,
+            data: 'null',
         });
     } catch (err) {
         console.log(err);
