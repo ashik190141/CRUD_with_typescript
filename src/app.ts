@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/api/users', userRoute)
-app.use('/api/users/:userId/orders', orderRoute);
+// app.use('/api/users/:userId/orders', orderRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

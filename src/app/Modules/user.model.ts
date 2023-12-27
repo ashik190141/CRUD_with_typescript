@@ -35,6 +35,7 @@ const userSchema = new Schema<TUser, TUserModel>(
       transform(doc, ret) {
         delete ret.password;
         delete ret.isDeleted;
+        delete ret._id
       }
     },
   }
