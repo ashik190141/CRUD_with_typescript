@@ -11,7 +11,7 @@ const addProduct = async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             message: "Order created successfully!",
-            data: null,
+            data: result,
         });
     } catch (err: any) {
         console.log(err);
@@ -26,18 +26,21 @@ const addProduct = async (req: Request, res: Response) => {
     }
 }
 
+function isObjectEmpty(obj:any) {
+    return Object.keys(obj).length === 0;
+}
+
 const getOrders = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
         const result = await orderService.getProductIntoDB(userId);
-
-        if (result?.$isEmpty) {
-            res.status(200).json({
-                success: true,
-                message: "user have no order!",
-                data: null,
-            });
-            return
+        if (result.every((obj) => isObjectEmpty(obj))) {
+          res.status(200).json({
+            success: true,
+            message: "user have no order!",
+            data: null,
+          });
+          return;
         }
         // console.log(result);
         res.status(200).json({

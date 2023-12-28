@@ -18,12 +18,19 @@ const addProductIntoDB = async (productInfo:TOrder ,id: string) => {
 };
 
 const getProductIntoDB = async (id: string) => {
-    const result = await orderModel.findOne(
-      { userId: parseInt(id) },
-      {
-        order: 1
-      }
-    );
+    const result = await orderModel.aggregate([
+        {
+            $match: {
+                userId: parseInt(id)
+            }
+        },
+        {
+            $project: {
+                _id:0,
+                order:1
+            }
+        }
+    ])
     return result;
 }
 
