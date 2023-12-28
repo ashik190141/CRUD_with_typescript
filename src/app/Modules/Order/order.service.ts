@@ -27,7 +27,34 @@ const getProductIntoDB = async (id: string) => {
     return result;
 }
 
+const getTotalPrice = async (id: string) => {
+    const result = await orderModel.aggregate([
+        {
+            $match: {
+                userId: parseInt(id)
+            }
+        },
+        {
+            $unwind : "$order"
+        },
+        {
+            $group: {
+                _id: "$email",
+                totalPrice: {$sum : "$order.price"}
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                totalPrice: 1
+            }
+        }
+    ])
+    return result;
+}
+
 export const orderService = {
     addProductIntoDB,
-    getProductIntoDB
+    getProductIntoDB,
+    getTotalPrice
 };

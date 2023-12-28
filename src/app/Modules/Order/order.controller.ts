@@ -30,7 +30,16 @@ const getOrders = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
         const result = await orderService.getProductIntoDB(userId);
-        console.log(result);
+
+        if (result?.$isEmpty) {
+            res.status(200).json({
+                success: true,
+                message: "user have no order!",
+                data: null,
+            });
+            return
+        }
+        // console.log(result);
         res.status(200).json({
             success: true,
             message: "Order fetched successfully!",
@@ -44,7 +53,35 @@ const getOrders = async (req: Request, res: Response) => {
     }
 }
 
+const getTotalPrice = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
+        const result = await orderService.getTotalPrice(userId);
+
+        if (result?.length == 0) {
+            res.status(200).json({
+                success: true,
+                message: "user have no order!",
+                data: null,
+            });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: result,
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+        });
+    }
+}
+
 export const orderController = {
     addProduct,
-    getOrders
+    getOrders,
+    getTotalPrice
 }
